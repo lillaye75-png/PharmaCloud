@@ -14,7 +14,7 @@ services:
       - key: ENVIRONMENT
         value: production
       - key: ALLOWED_ORIGINS
-        value: https://pharmacloud.vercel.app,http://localhost:3000
+        value: https://pharma-cloud.vercel.app,http://localhost:3000
       - key: CLOUDINARY_URL
         value: cloudinary://172438666353219:VOCO4-nCzGd2PFLqh94tUjL14kk@dxzpdbips
       - key: SMTP_FROM
