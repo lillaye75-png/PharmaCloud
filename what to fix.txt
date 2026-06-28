@@ -1,0 +1,261 @@
+product cannot be added
+categorie, departement cannot be added
+inventaire are not clickable
+bon de livraison are empty : Aucun bon de livraison
+in commande there's no online store to open or settings up online store
+carte pharmacie there's no carte which will show all available pharmacie
+in settings always pharmacie will be empty notification, security not yet builded : Module en cours de développement
+assistance any information fielled : User not found or inactive
+users create : User not found or inactive
+depence : User not found or inactive
+on console : favicon.ico:1  Failed to load resource: the server responded with a status of 404 (Not Found)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 840ms
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 724ms
+:8000/api/v1/sales/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/sales/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/products/search?q=a:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/products/search?q=b:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 690ms
+:8000/api/v1/products/?size=200:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/products/?size=200:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 536ms
+:8000/api/v1/categories/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/departments:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/departments:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 762ms
+:8000/api/v1/inventories/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 676ms
+:8000/api/v1/inventories/stock-movements:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/stock-movements:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 653ms
+:8000/api/v1/delivery-slips/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/delivery-slips/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 718ms
+:8000/api/v1/orders/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/orders/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 793ms
+:8000/api/v1/network/pharmacies:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/network/pharmacies:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 1425ms
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/billing/subscription:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/billing/subscription:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 1385ms
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/wizard/status:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/wizard/status:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 902ms
+:8000/api/v1/users/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/users/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/users/invite:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 973ms
+:8000/api/v1/expenses/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/expenses/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/expenses/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/products/?size=200:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/products/?size=200:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 769ms
+:8000/api/v1/categories/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/departments:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/departments:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/departments:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/stock-movements:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/stock-movements:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/delivery-slips/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/delivery-slips/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/products/?size=200:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/products/?size=200:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/departments:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/categories/departments:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/sales/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/sales/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/products/?size=200:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/products/?size=200:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/stock-movements:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/stock-movements:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/stock-movements?movement_type=in:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/stock-movements?movement_type=out:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/stock-movements?movement_type=adjustment:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/stock-movements?movement_type=return:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/inventories/stock-movements:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/delivery-slips/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/delivery-slips/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/orders/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/orders/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/network/pharmacies:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/network/pharmacies:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 1085ms
+:8000/api/v1/reports/sales?period=today:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/reports/inventory:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/reports/sales?period=today:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/reports/inventory:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/billing/subscription:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/billing/subscription:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/wizard/status:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/wizard/status:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/tenant/me:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/users/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/users/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/expenses/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/expenses/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+:8000/api/v1/expenses/:1  Failed to load resource: the server responded with a status of 401 (Unauthorized)
+
+next fix
+dashboard don't get update
+pos you cannot add or enter customer information like full name mandatory but other customer information will be (optionnal)
+after sales the invoice won't pop's up to preview it
+history sales you cannot open it to view it or edit delete reprint it
+product after add new product you cannot delete/edit it
+categorie : departement, categorie you cannot delete/edit it
+inventaire new inventaire button when you click on it it will be not open anything
+rapports : add downloadable button to pdf, cvs
+settings : information from pharmacie cannot be modified, online store slug cannot be customized, notification, security not yet builded
+assistance when you click on it it will open then close by it self
+users you can add but not delete/edit
+depense you can add but not remove/edit
+online odder after oddered stock will not auto accounting
+bon de livraison, mouvement where to add one of this in there interface there's no add button to create somethings on them
+here's what's on console : hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 1010ms
+hot-reloader-app.js:197 [Fast Refresh] rebuilding
+report-hmr-latency.js:14 [Fast Refresh] done in 892ms
+:8000/api/v1/expenses/abea72fd-5ca1-4939-a970-1958b4e8161a:1  Failed to load resource: the server responded with a status of 404 (Not Found)
+also after all this fix build an moder landing page which will worth 100m dollar app for the app include all fonctionnalities, also with my information as the owner/developper : MY NAME : ABDOULAYE SOW NUMBER/WHATSAPP : +221776621410 +221708372127 EMAIL : layedevops@gmail.com 
+also for the gui ui ux use those skill installed on opencode skills location also make it modern to be worth 100m dollar app
+here's those skills installed :
+Found 21 skills installed at C:\Users\HP\.mimocode\skills\:
+
+#	Skill
+1	21st-dev
+2	60fps-design
+3	create-app
+4	cta-gallery
+5	debug
+6	drizzle-orm
+7	figma-mcp
+8	glass3d-dev
+9	mcp-servers
+10	mcp-skills-ext
+11	mcp-ui
+12	nextjs
+13	playwright
+14	react-hook-form
+15	refactor
+16	shadcn-ui
+17	supabase
+18	tailwindcss
+19	ui-ux-pro-max
+20	v0-app
+21	zod
+
+next fix 
+after my full test here's what i found as issue let's fix it before adding new features by using full power mode To activate ALL skills at once
+when clicking on dashboard it will redrige you to the landing page
+history sales you can view/reprint it but no delete it : Erreur lors de la suppression
+in pos after made a sales it will not include the seller and customer information inside the invoice
+product you can create it but not edit or delete it when editing to save it it will send a message : localhost:3000 indique [object Object] also after delete you have to refresh the page
+while creating inventaire it will send error : localhost:3000 indique [object Object] button erro : Lancer l&apos;inventaire
+Mouvements de stock : Module mouvements - API en cours de développement
+Nouveau bon de livraison : you cannot created it error : localhost:3000 indique [object Object],[object Object],[object Object]
+online store configuration it won't saved any data on it also logo uploads will get error 404
+Réseau Inter-Pharmacies when wanna add a request the google plan will be displayed on the request pop's up windows
+rapport after download it as pdf it will be not openable or as cvs it will not separate culom it will combine culom
+Facturation électronique error : Impossible de charger les factures. Réessayer
+Paiements when clicking configure button nothings will appear to set api key
+grossist error : ## Error Type
+Runtime TypeError
+
+## Error Message
+wholesalers.map is not a function
+
+
+    at GrossistesPage (app\(dashboard)\grossistes\page.tsx:133:24)
+
+## Code Frame
+  131 |       ) : (
+  132 |         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+> 133 |           {wholesalers.map((w) => (
+      |                        ^
+  134 |             <div key={w.id} className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+  135 |               <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-pharma-50 text-pharma-600">
+  136 |                 <Building2 size={24} />
+
+Next.js version: 15.5.19 (Webpack)
+settings notification : turn all notification on and saved it won't be saved also after reload the page every notification which seted on will be set off by default
+assistance it suppose to be like when new users login it will open for users fill it but it's on the sidebar and when open it it auto close and goes to settings back
+notification when click on s'abonner it will send an error message : Impossible de s'abonner (vérifiez la clé VAPID)
+Import / Export when click on Exporter les produits Télécharger CSV it will not separate culom it will combine culom 
+still the sidebar are too long cause lang switch, dark/ligh, logoof button can you add a profil whick you gonna combine those button on it it's just a proposion and tell what you think on it also if you can do better tell me
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Error Type
+Runtime ChunkLoadError
+
+## Error Message
+Loading chunk app/(dashboard)/layout failed.
+(error: http://localhost:3000/_next/static/chunks/app/(dashboard)/layout.js)
+
+Next.js version: 15.5.19 (Webpack)

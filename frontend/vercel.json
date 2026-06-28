@@ -1,0 +1,7 @@
+{
+  "framework": "nextjs",
+  "env": {
+    "NEXT_PUBLIC_API_URL": "https://pharmacloud-api.onrender.com/api/v1",
+    "NEXT_PUBLIC_APP_NAME": "PharmaCloud"
+  }
+}

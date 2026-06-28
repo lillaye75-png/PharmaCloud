@@ -1,0 +1,32 @@
+{
+  "name": "pharmacloud-desktop",
+  "version": "1.0.0",
+  "description": "PharmaCloud Desktop App",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.pharmacloud.desktop",
+    "productName": "PharmaCloud",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "language": "1036",
+      "installerLanguages": ["fr_FR"],
+      "createDesktopShortcut": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  }
+}

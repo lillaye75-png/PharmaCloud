@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "PharmaCloud",
+    "slug": "pharmacloud",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "pharmacloud",
+    "plugins": [
+      "expo-router",
+      "expo-notifications",
+      "expo-sqlite"
+    ],
+    "extra": {
+      "apiUrl": "http://localhost:8000/api/v1"
+    }
+  }
+}
