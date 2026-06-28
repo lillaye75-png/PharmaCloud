@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Pill, ShoppingCart, Package, Store, Network, Brain, BarChart3, Menu, X, ChevronRight, Star, ArrowUpRight, CheckCircle, TrendingUp, Users, ClipboardList } from "lucide-react";
