@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     ANTHROPIC_API_KEY: Optional[str] = None
-    ANTHROPIC_MODEL: str = "claude-haiku-3-5-sonnet"
+    ANTHROPIC_MODEL: str = "claude-3-5-haiku-latest"
 
     ORANGE_MONEY_CLIENT_ID: Optional[str] = None
     ORANGE_MONEY_CLIENT_SECRET: Optional[str] = None
