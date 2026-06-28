@@ -1,15 +1,15 @@
 import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Boolean, DateTime, Date, Text, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Uuid
 from app.database import Base
 
 
 class MedicationReminder(Base):
     __tablename__ = "medication_reminders"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False)
-    product_id = Column(UUID(as_uuid=True), ForeignKey("products.id"), nullable=True)
+    id = Column(Uuid, primary_key=True, default=uuid.uuid4)
+    user_id = Column(Uuid, ForeignKey("users.id"), nullable=False)
+    product_id = Column(Uuid, ForeignKey("products.id"), nullable=True)
     product_name = Column(String(255), nullable=True)
     dosage = Column(String(100), nullable=True)
     frequency = Column(String(50), nullable=True)

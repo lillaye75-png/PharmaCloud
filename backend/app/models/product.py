@@ -1,15 +1,15 @@
 import uuid
 from datetime import datetime, timezone
 from sqlalchemy import Column, String, Boolean, DateTime, Text, Integer, Float, ForeignKey, Date
-from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import Uuid
 from sqlalchemy.orm import relationship
 from app.database import Base
 
 
 class Category(Base):
     __tablename__ = "categories"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False)
+    id = Column(Uuid, primary_key=True, default=uuid.uuid4)
+    tenant_id = Column(Uuid, ForeignKey("tenants.id"), nullable=False)
     name = Column(String(255), nullable=False)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
@@ -17,8 +17,8 @@ class Category(Base):
 
 class Department(Base):
     __tablename__ = "departments"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False)
+    id = Column(Uuid, primary_key=True, default=uuid.uuid4)
+    tenant_id = Column(Uuid, ForeignKey("tenants.id"), nullable=False)
     name = Column(String(255), nullable=False)
     color = Column(String(50), nullable=True)
     sort_order = Column(Integer, default=0)
@@ -28,9 +28,9 @@ class Department(Base):
 
 class Range(Base):
     __tablename__ = "ranges"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id"), nullable=False)
-    department_id = Column(UUID(as_uuid=True), ForeignKey("departments.id"), nullable=True)
+    id = Column(Uuid, primary_key=True, default=uuid.uuid4)
+    tenant_id = Column(Uuid, ForeignKey("tenants.id"), nullable=False)
+    department_id = Column(Uuid, ForeignKey("departments.id"), nullable=True)
     name = Column(String(255), nullable=False)
     color = Column(String(50), nullable=True)
     is_active = Column(Boolean, default=True)
@@ -40,14 +40,14 @@ class Range(Base):
 class Product(Base):
     __tablename__ = "products"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False, index=True)
+    id = Column(Uuid, primary_key=True, default=uuid.uuid4)
+    tenant_id = Column(Uuid, ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False, index=True)
     name = Column(String(255), nullable=False)
     generic_name = Column(String(255), nullable=True)
     barcode = Column(String(100), nullable=True, index=True)
-    category_id = Column(UUID(as_uuid=True), ForeignKey("categories.id"), nullable=True)
-    department_id = Column(UUID(as_uuid=True), ForeignKey("departments.id"), nullable=True)
-    range_id = Column(UUID(as_uuid=True), ForeignKey("ranges.id"), nullable=True)
+    category_id = Column(Uuid, ForeignKey("categories.id"), nullable=True)
+    department_id = Column(Uuid, ForeignKey("departments.id"), nullable=True)
+    range_id = Column(Uuid, ForeignKey("ranges.id"), nullable=True)
     description = Column(Text, nullable=True)
     composition = Column(Text, nullable=True)
     dosage_form = Column(String(100), nullable=True)
