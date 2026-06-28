@@ -44,7 +44,10 @@ async def chat_with_claude(
             data = resp.json()
             return data["content"][0]["text"]
     except Exception as e:
-        return f"Erreur IA: {str(e)}"
+        err_msg = str(e)
+        if "credit balance" in err_msg.lower():
+            return "Compte Anthropic à créditer — Rendez-vous sur https://console.anthropic.com/settings/plans pour ajouter des crédits."
+        return f"Erreur IA: {err_msg}"
 
 
 async def analyze_prescription_ocr(
