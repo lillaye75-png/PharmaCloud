@@ -14,19 +14,8 @@ services:
       - key: ENVIRONMENT
         value: production
       - key: ALLOWED_ORIGINS
-        value: https://pharmacloud-frontend.onrender.com,https://pharmacloud.onrender.com
+        value: https://pharmacloud.vercel.app,http://localhost:3000
       - key: CLOUDINARY_URL
         value: cloudinary://172438666353219:VOCO4-nCzGd2PFLqh94tUjL14kk@dxzpdbips
       - key: SMTP_FROM
         value: pharmacloud@pharmacie.sn
-
-  - type: web
-    name: pharmacloud-frontend
-    env: node
-    region: frankfurt
-    plan: free
-    buildCommand: cd frontend && npm install && npm run build
-    startCommand: cd frontend && npm start
-    envVars:
-      - key: NEXT_PUBLIC_API_URL
-        value: https://pharmacloud-backend.onrender.com/api/v1
