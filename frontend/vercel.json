@@ -1,5 +1,7 @@
 {
   "framework": "nextjs",
+  "rootDirectory": "frontend",
+  "buildCommand": "npm install && next build",
   "env": {
     "NEXT_PUBLIC_API_URL": "https://pharmacloud-backend.onrender.com/api/v1",
     "NEXT_PUBLIC_APP_NAME": "PharmaCloud"
