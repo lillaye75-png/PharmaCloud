@@ -97,10 +97,27 @@
 - [x] Audit de sécurité complet — docs/SECURITY_AUDIT.md
 - [x] Documentation API complète — docs/API.md
 
+### Déploiement Production
+- [x] Render backend — déployé et live (`https://pharmacloud-backend.onrender.com`)
+- [x] Vercel frontend — déployé et live (`https://pharma-cloud.vercel.app`)
+- [x] CORS wildcard — résolu les erreurs de préflight
+- [x] Base Neon PostgreSQL — UUID types, schéma propre
+- [x] bcrypt/passlib — compatibilité Python 3.14 résolue
+- [x] Seed admin — `owner@pharmacie.sn` / `password123`
+- [x] Assistant IA — Clé Anthropic ajoutée (`ANTHROPIC_API_KEY`)
+- [x] Auto-polling — Dashboard (30s), Produits (15s), Commandes (30s)
+- [x] Wizard onboarding — visible uniquement à la première connexion
+- [x] Wizard caché du sidebar après complétion
+
 ---
 
 ## 🔜 Idées futures
 - [ ] Application mobile (React Native / Flutter)
+- [ ] Ajouter des crédits Anthropic pour activer le chatbot IA
+- [ ] Configurer cron-job.org pour éviter le cold start Render (ping /health toutes les 14min)
+- [ ] Clés API réelles Orange Money / Wave pour paiements en production
+- [ ] SMTP réel (SendGrid / Mailgun / Resend) pour les emails transactionnels
+- [ ] Tests Playwright E2E contre la production
 
 ---
 
