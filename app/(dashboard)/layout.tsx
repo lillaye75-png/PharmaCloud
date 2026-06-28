@@ -20,10 +20,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     if (Notification.permission === "default") {
       requestNotificationPermission();
     }
-    if (!pathname.startsWith("/parametres/wizard")) {
-      api.get<{ completed: boolean }>("/wizard/status").then((status) => {
-        if (!status.completed) router.push("/parametres/wizard");
-      }).catch(() => {});
+    if (!pathname.startsWith("/parametres/wizard") && typeof window !== "undefined") {
+      const wizardDone = sessionStorage.getItem("wizard_checked");
+      if (!wizardDone) {
+        api.get<{ completed: boolean }>("/wizard/status").then((status) => {
+          sessionStorage.setItem("wizard_checked", "1");
+          if (!status.completed) router.push("/parametres/wizard");
+        }).catch(() => {});
+      }
     }
   }, [router, pathname]);
 

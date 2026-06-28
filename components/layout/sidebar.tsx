@@ -77,7 +77,7 @@ export default function Sidebar() {
     ]},
     { section: "section.settings", items: [
       { href: "/parametres", icon: Settings, label: "nav.pharmacy" },
-      { href: "/parametres/wizard", icon: Settings, label: "nav.wizard" },
+      { href: "/parametres/wizard", icon: Settings, label: "nav.wizard", hidden: true },
       { href: "/utilisateurs", icon: Settings, label: "nav.users" },
       { href: "/depenses", icon: Settings, label: "nav.expenses" },
       { href: "/assistance", icon: MessageCircle, label: "nav.assistance" },
@@ -116,7 +116,7 @@ export default function Sidebar() {
               <div className="px-3 mb-1 text-[11px] font-semibold uppercase tracking-wider text-pharma-200/70">
                 {t(group.section)}
               </div>
-              {group.items.map((item) => {
+              {group.items.filter((item) => !(item as any).hidden).map((item) => {
                 const isActive = pathname === item.href;
                 return (
                   <Link
