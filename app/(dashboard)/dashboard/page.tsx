@@ -5,6 +5,7 @@ import { Package, ShoppingCart, TrendingUp, AlertTriangle, ArrowRight } from "lu
 import Link from "next/link";
 import { api } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
+import { usePolling } from "@/lib/usePolling";
 
 interface SaleItem {
   id: number;
@@ -67,6 +68,7 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+  usePolling(fetchData, 30000);
 
   if (loading) {
     return (

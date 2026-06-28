@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { api } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Package, Search, Clock, CheckCircle, XCircle } from "lucide-react";
+import { usePolling } from "@/lib/usePolling";
 
 interface Order {
   id: string;
@@ -40,6 +41,7 @@ export default function CommandesPage() {
   }, [filter]);
 
   useEffect(() => { load(); }, [load]);
+  usePolling(load, 30000);
 
   const updateStatus = async (id: string, status: string) => {
     try {

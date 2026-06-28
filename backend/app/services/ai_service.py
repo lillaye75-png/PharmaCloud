@@ -1,8 +1,5 @@
-import os
 from typing import Optional
-
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
-ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-haiku-3-5-sonnet")
+from app.config import settings
 
 
 async def chat_with_claude(
@@ -10,7 +7,7 @@ async def chat_with_claude(
     pharmacy_name: str = "PharmaCloud",
     system_prompt: Optional[str] = None,
 ) -> str:
-    if not ANTHROPIC_API_KEY:
+    if not settings.ANTHROPIC_API_KEY:
         return "🤖 Mode démo — Connectez une clé API Claude pour activer l'assistant IA."
 
     default_system = (
@@ -26,7 +23,7 @@ async def chat_with_claude(
     import httpx
 
     payload = {
-        "model": ANTHROPIC_MODEL,
+        "model": settings.ANTHROPIC_MODEL,
         "max_tokens": 1024,
         "system": system_prompt or default_system,
         "messages": [{"role": "user", "content": message}],
@@ -37,7 +34,7 @@ async def chat_with_claude(
             resp = await client.post(
                 "https://api.anthropic.com/v1/messages",
                 headers={
-                    "x-api-key": ANTHROPIC_API_KEY,
+                    "x-api-key": settings.ANTHROPIC_API_KEY,
                     "anthropic-version": "2023-06-01",
                     "content-type": "application/json",
                 },
@@ -54,7 +51,7 @@ async def analyze_prescription_ocr(
     image_url: str,
     pharmacy_name: str = "PharmaCloud",
 ) -> str:
-    if not ANTHROPIC_API_KEY:
+    if not settings.ANTHROPIC_API_KEY:
         return "Mode démo — Fonction IA non disponible sans clé API."
 
     import httpx
@@ -70,7 +67,7 @@ async def analyze_prescription_ocr(
     )
 
     payload = {
-        "model": ANTHROPIC_MODEL,
+        "model": settings.ANTHROPIC_MODEL,
         "max_tokens": 2048,
         "system": system,
         "messages": [
@@ -89,7 +86,7 @@ async def analyze_prescription_ocr(
             resp = await client.post(
                 "https://api.anthropic.com/v1/messages",
                 headers={
-                    "x-api-key": ANTHROPIC_API_KEY,
+                    "x-api-key": settings.ANTHROPIC_API_KEY,
                     "anthropic-version": "2023-06-01",
                     "content-type": "application/json",
                 },

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { Search, Plus, AlertTriangle, Package, Edit, Trash2 } from "lucide-react";
+import { usePolling } from "@/lib/usePolling";
 
 interface Product {
   id: string;
@@ -42,6 +43,7 @@ export default function ProduitsPage() {
   }, [tab, search]);
 
   useEffect(() => { load(); }, [load]);
+  usePolling(load, 15000);
 
   return (
     <div>
