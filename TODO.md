@@ -104,7 +104,7 @@
 - [x] Base Neon PostgreSQL — UUID types, schéma propre
 - [x] bcrypt/passlib — compatibilité Python 3.14 résolue
 - [x] Seed admin — `owner@pharmacie.sn` / `password123`
-- [x] Assistant IA — Migré vers Google Gemini (gratuit) — mode hors-ligne sans clé API
+- [x] Assistant IA — Google Gemini (gratuit) via API REST + header X-goog-api-key + mode hors-ligne fallback
 - [x] Auto-polling — Dashboard (30s), Produits (15s), Commandes (30s)
 - [x] Wizard onboarding — visible uniquement à la première connexion
 - [x] Wizard caché du sidebar après complétion
@@ -113,11 +113,9 @@
 
 ## 🔜 Idées futures
 - [ ] Application mobile (React Native / Flutter)
-- [x] Clé API Google Gemini obtenue et configurée dans Render — chatbot IA actif avec Gemini 1.5 Flash (gratuit)
-- [ ] Configurer cron-job.org pour éviter le cold start Render (ping /health toutes les 14min)
-- [ ] Clés API réelles Orange Money / Wave pour paiements en production
-- [x] SMTP réel — Resend intégré et clé API configurée dans Render
-- [x] Tests Playwright E2E contre la production — landing, login, API health
+- [ ] Configurer cron-job.org pour éviter le cold start Render (ping /health toutes les 14min) — toi
+- [ ] Clés API réelles Orange Money / Wave — les utilisateurs configurent leurs propres clés dans Paramètres
+- [ ] Page "Paramètres > Paiements" pour que chaque pharmacie entre ses clés Orange/Wave/SMTP
 
 ---
 
