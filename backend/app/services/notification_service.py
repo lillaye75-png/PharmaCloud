@@ -1,10 +1,10 @@
 import smtplib
 import os
 import json
-import random
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime, timezone
+from app.config import settings
 
 SMTP_HOST = os.getenv("SMTP_HOST", "")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
@@ -13,6 +13,23 @@ SMTP_PASS = os.getenv("SMTP_PASS", "")
 SMTP_FROM = os.getenv("SMTP_FROM", "pharmacloud@pharmacie.sn")
 
 _ethereal_creds = None
+
+
+async def send_via_resend(to: str, subject: str, body: str) -> dict:
+    try:
+        import resend
+        resend.api_key = settings.RESEND_API_KEY
+        params = {
+            "from": f"PharmaCloud <{settings.SMTP_FROM}>",
+            "to": [to],
+            "subject": subject,
+            "html": body,
+        }
+        r = resend.Emails.send(params)
+        return {"status": "sent", "provider": "resend", "to": to, "id": r.get("id", "")}
+    except Exception as e:
+        return {"status": "error", "message": str(e), "provider": "resend"}
+
 
 async def _get_ethereal_creds():
     global _ethereal_creds
@@ -37,7 +54,13 @@ async def _get_ethereal_creds():
         print(f"[Ethereal] Erreur de création: {e}")
     return None
 
+
 async def send_email(to: str, subject: str, body: str) -> dict:
+    if settings.RESEND_API_KEY:
+        result = await send_via_resend(to, subject, body)
+        if result["status"] == "sent":
+            return result
+
     if SMTP_HOST and SMTP_USER and SMTP_PASS:
         msg = MIMEMultipart()
         msg["From"] = SMTP_FROM
@@ -65,14 +88,11 @@ async def send_email(to: str, subject: str, body: str) -> dict:
                 server.starttls()
                 server.login(creds["user"], creds["pass"])
                 server.send_message(msg)
-            preview_url = f"https://ethereal.email/messages"
             return {
                 "status": "sent",
                 "provider": "ethereal",
                 "to": to,
-                "preview_url": preview_url,
                 "note": "Email visible sur https://ethereal.email (login avec les credentials ci-dessus)",
-                "credentials": {"user": creds["user"], "pass": creds["pass"]},
             }
         except Exception as e:
             print(f"[Ethereal] Send failed: {e}")
@@ -83,36 +103,31 @@ async def send_email(to: str, subject: str, body: str) -> dict:
         "status": "logged",
         "provider": "console",
         "to": to,
-        "message": "Email affiché dans la console (aucun SMTP configuré)",
+        "message": "Email affiché dans la console (aucun service email configuré)",
     }
+
 
 async def send_sms(to: str, message: str) -> dict:
-    """Send SMS via console fallback (Orange SMS API in production)."""
     print(f"[SMS] To: {to} | Message: {message[:100]}...")
-    return {
-        "status": "logged",
-        "provider": "console",
-        "to": to,
-        "message": f"SMS simulé pour {to}",
-    }
+    return {"status": "logged", "provider": "console", "to": to, "message": f"SMS simulé pour {to}"}
+
 
 async def send_notification(user_email: str, notification_type: str, data: dict) -> dict:
-    """Send templated notification."""
     templates = {
         "stock_faible": {
-            "subject": "🔴 Alerte Stock Faible - PharmaCloud",
+            "subject": "Alerte Stock Faible - PharmaCloud",
             "body": f"<h2>Stock faible détecté</h2><p>Le produit <b>{data.get('product_name', 'N/A')}</b> a un stock de <b>{data.get('current_stock', 0)}</b> unités.</p>",
         },
         "peremption": {
-            "subject": "⚠️ Produit proche de la péremption - PharmaCloud",
+            "subject": "Produit proche de la péremption - PharmaCloud",
             "body": f"<h2>Alerte péremption</h2><p>Le produit <b>{data.get('product_name', 'N/A')}</b> expire le <b>{data.get('expiry_date', 'N/A')}</b>.</p>",
         },
         "nouvelle_commande": {
-            "subject": "🛒 Nouvelle commande reçue - PharmaCloud",
+            "subject": "Nouvelle commande reçue - PharmaCloud",
             "body": f"<h2>Nouvelle commande</h2><p>Commande #{data.get('order_id', 'N/A')} reçue pour {data.get('amount', 0)} FCFA.</p>",
         },
         "rapport_hebdo": {
-            "subject": "📊 Rapport hebdomadaire - PharmaCloud",
+            "subject": "Rapport hebdomadaire - PharmaCloud",
             "body": f"<h2>Rapport hebdomadaire</h2><p>Ventes: {data.get('sales', 0)} FCFA<br>Commandes: {data.get('orders', 0)}<br>Produits en stock faible: {data.get('low_stock', 0)}</p>",
         },
     }

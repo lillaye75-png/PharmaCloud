@@ -1,6 +1,4 @@
 from typing import Optional
-import json
-import re
 from app.config import settings
 
 
@@ -20,8 +18,10 @@ PHARMA_KEYWORDS = {
     "infection": "Amoxicilline 500mg – 1 gélule 3x/j – Terminer le traitement. ~2000-4000 FCFA",
     "plaie": "Bétadine solution – Application locale 2x/j – Ne pas ingérer. ~1500-3000 FCFA",
     "brûlure": "Biafine crème – Application 2-3x/j – Protection solaire si exposition. ~3000-6000 FCFA",
-    "conseil": "Important: Consultez toujours un pharmacien ou médecin avant tout traitement. Je suis une IA d'assistance et non un professionnel de santé."
 }
+
+GREETINGS = ["bonjour", "salut", "hello", "bonsoir", "salam"]
+THANKS = ["merci", "thanks", "merci beaucoup"]
 
 
 def _keyword_response(message: str) -> Optional[str]:
@@ -33,23 +33,18 @@ def _keyword_response(message: str) -> Optional[str]:
     if matches:
         matches.sort(key=lambda x: x[0])
         return matches[0][1]
-    if any(w in msg_lower for w in ["bonjour", "salut", "hello"]):
-        return "Bonjour ! Je suis PharmIA, votre assistant pharmacie. Posez-moi vos questions sur les médicaments, symptômes, posologies, ou contre-indications."
-    if any(w in msg_lower for w in ["merci", "thanks"]):
+    if any(w in msg_lower for w in GREETINGS):
+        return (
+            "Bonjour ! Je suis PharmIA, votre assistant pharmacie. "
+            "Posez-moi vos questions sur les médicaments, symptômes, posologies, ou contre-indications."
+        )
+    if any(w in msg_lower for w in THANKS):
         return "De rien ! N'hésitez pas si vous avez d'autres questions. Prenez soin de vous."
     return None
 
 
-async def chat_with_assistant(
-    message: str,
-    pharmacy_name: str = "PharmaCloud",
-    system_prompt: Optional[str] = None,
-) -> str:
-    keyword_result = _keyword_response(message)
-    if keyword_result and not settings.GOOGLE_API_KEY:
-        return f"🤖 {keyword_result}\n\n_Pour des réponses complètes, connectez une clé API Google Gemini (gratuite) dans Paramètres. Sans clé, je réponds aux questions courantes._"
-
-    default_system = (
+def _build_system_prompt(pharmacy_name: str) -> str:
+    return (
         f"Tu es PharmIA, l'assistant pharmacie de {pharmacy_name}. "
         "Tu aides les clients à identifier des médicaments adaptés à leurs symptômes. "
         "Tu réponds TOUJOURS en français. "
@@ -59,31 +54,87 @@ async def chat_with_assistant(
         "Ne prescris jamais, ne diagnostiques jamais."
     )
 
-    try:
-        import google.generativeai as genai
-        genai.configure(api_key=settings.GOOGLE_API_KEY)
-        model = genai.GenerativeModel(
-            settings.GEMINI_MODEL,
-            system_instruction=system_prompt or default_system,
+
+async def _call_gemini_via_rest(message: str, system_prompt: str) -> str:
+    import httpx
+
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.GEMINI_MODEL}:generateContent?key={settings.GOOGLE_API_KEY}"
+    payload = {
+        "systemInstruction": {
+            "parts": [{"text": system_prompt}]
+        },
+        "contents": [
+            {
+                "parts": [{"text": message}]
+            }
+        ],
+        "generationConfig": {
+            "maxOutputTokens": 1024,
+            "temperature": 0.7,
+        },
+    }
+    async with httpx.AsyncClient(timeout=30) as client:
+        resp = await client.post(url, json=payload)
+        data = resp.json()
+        if resp.status_code != 200:
+            err_msg = data.get("error", {}).get("message", str(data))
+            raise RuntimeError(err_msg)
+        candidates = data.get("candidates", [])
+        if not candidates:
+            raise RuntimeError("Aucune réponse générée")
+        return candidates[0]["content"]["parts"][0]["text"]
+
+
+async def chat_with_assistant(
+    message: str,
+    pharmacy_name: str = "PharmaCloud",
+    system_prompt: Optional[str] = None,
+) -> str:
+    has_key = bool(settings.GOOGLE_API_KEY and settings.GOOGLE_API_KEY.strip())
+
+    keyword_result = _keyword_response(message)
+    if keyword_result and not has_key:
+        return (
+            f"🤖 {keyword_result}\n\n"
+            "_Pour des réponses complètes, connectez une clé API Google Gemini (gratuite) dans Paramètres. "
+            "Sans clé, je réponds aux questions courantes._"
         )
-        resp = model.generate_content(message)
-        return resp.text
-    except Exception as e:
-        err = str(e)
-        if "API_KEY" in err or "api key" in err or "not found" in err:
-            return "Clé API Google Gemini invalide. Obtenez-en une gratuite sur https://aistudio.google.com/apikey"
-        keyword_fallback = _keyword_response(message)
-        if keyword_fallback:
-            return f"🤖 {keyword_fallback}\n\n_Source: base de connaissances locale (mode hors-ligne)_"
-        return f"Erreur IA: {err}"
+
+    prompt = system_prompt or _build_system_prompt(pharmacy_name)
+
+    if has_key:
+        try:
+            return await _call_gemini_via_rest(message, prompt)
+        except Exception as e:
+            err = str(e)
+            if "API_KEY" in err.upper() or "not found" in err.lower() or "invalid" in err.lower() or "permission" in err.lower() or "403" in err or "400" in err:
+                return (
+                    f"❌ Clé API Google Gemini invalide ({err[:100]}).\n\n"
+                    "Obtenez une nouvelle clé gratuite sur https://aistudio.google.com/apikey\n"
+                    "Puis mettez-la dans Render Dashboard → Environment → GOOGLE_API_KEY"
+                )
+
+    keyword_fallback = _keyword_response(message)
+    if keyword_fallback:
+        return f"🤖 {keyword_fallback}\n\n_Source: base de connaissances locale (mode hors-ligne)_"
+
+    return (
+        "Je suis désolé, je n'ai pas trouvé de réponse dans ma base de connaissances locale. "
+        "Connectez une clé API Google Gemini (gratuite) pour activer les réponses complètes.\n\n"
+        "Ou contactez layedevops@gmail.com pour obtenir de l'aide."
+    )
 
 
 async def analyze_prescription_ocr(
     image_url: str,
     pharmacy_name: str = "PharmaCloud",
 ) -> str:
-    if not settings.GOOGLE_API_KEY:
-        return "Mode hors-ligne — Fonction analyse d'ordonnance disponible uniquement avec une clé API Google Gemini (gratuite)."
+    has_key = bool(settings.GOOGLE_API_KEY and settings.GOOGLE_API_KEY.strip())
+    if not has_key:
+        return (
+            "Mode hors-ligne — Fonction analyse d'ordonnance disponible uniquement "
+            "avec une clé API Google Gemini (gratuite) sur https://aistudio.google.com/apikey"
+        )
 
     system = (
         f"Tu es un assistant pharmaceutique pour {pharmacy_name}. "
@@ -95,11 +146,40 @@ async def analyze_prescription_ocr(
         "Réponds en français, de façon claire et structurée."
     )
 
+    import httpx
+    import base64
+
     try:
-        import google.generativeai as genai
-        genai.configure(api_key=settings.GOOGLE_API_KEY)
-        model = genai.GenerativeModel(settings.GEMINI_MODEL, system_instruction=system)
-        resp = model.generate_content([{"mime_type": "image/jpeg", "data": image_url}])
-        return resp.text
+        async with httpx.AsyncClient(timeout=15) as client:
+            img_resp = await client.get(image_url)
+            img_resp.raise_for_status()
+            img_b64 = base64.b64encode(img_resp.content).decode("utf-8")
+
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.GEMINI_MODEL}:generateContent?key={settings.GOOGLE_API_KEY}"
+        payload = {
+            "systemInstruction": {"parts": [{"text": system}]},
+            "contents": [
+                {
+                    "parts": [
+                        {"text": "Analyse cette ordonnance et génère un rapport patient."},
+                        {
+                            "inline_data": {
+                                "mime_type": "image/jpeg",
+                                "data": img_b64,
+                            }
+                        },
+                    ]
+                }
+            ],
+        }
+        async with httpx.AsyncClient(timeout=60) as client:
+            resp = await client.post(url, json=payload)
+            data = resp.json()
+            if resp.status_code != 200:
+                return f"Erreur API: {data.get('error', {}).get('message', str(data))}"
+            candidates = data.get("candidates", [])
+            if not candidates:
+                return "Aucune analyse générée"
+            return candidates[0]["content"]["parts"][0]["text"]
     except Exception as e:
         return f"Erreur analyse ordonnance: {str(e)}"

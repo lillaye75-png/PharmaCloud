@@ -19,5 +19,7 @@ services:
         value: cloudinary://172438666353219:VOCO4-nCzGd2PFLqh94tUjL14kk@dxzpdbips
       - key: SMTP_FROM
         value: pharmacloud@pharmacie.sn
+      - key: RESEND_API_KEY
+        sync: false
       - key: GOOGLE_API_KEY
         sync: false

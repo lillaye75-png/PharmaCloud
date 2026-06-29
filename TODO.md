@@ -113,7 +113,7 @@
 
 ## 🔜 Idées futures
 - [ ] Application mobile (React Native / Flutter)
-- [ ] Obtenir une clé API Google Gemini (gratuite) sur https://aistudio.google.com/apikey pour activer le chatbot IA complet
+- [x] Clé API Google Gemini obtenue et configurée dans Render — chatbot IA actif avec Gemini 1.5 Flash (gratuit)
 - [ ] Configurer cron-job.org pour éviter le cold start Render (ping /health toutes les 14min)
 - [ ] Clés API réelles Orange Money / Wave pour paiements en production
 - [ ] SMTP réel (SendGrid / Mailgun / Resend) pour les emails transactionnels
