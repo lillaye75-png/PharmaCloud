@@ -104,7 +104,7 @@
 - [x] Base Neon PostgreSQL — UUID types, schéma propre
 - [x] bcrypt/passlib — compatibilité Python 3.14 résolue
 - [x] Seed admin — `owner@pharmacie.sn` / `password123`
-- [x] Assistant IA — Clé Anthropic ajoutée (`ANTHROPIC_API_KEY`)
+- [x] Assistant IA — Migré vers Google Gemini (gratuit) — mode hors-ligne sans clé API
 - [x] Auto-polling — Dashboard (30s), Produits (15s), Commandes (30s)
 - [x] Wizard onboarding — visible uniquement à la première connexion
 - [x] Wizard caché du sidebar après complétion
@@ -113,11 +113,11 @@
 
 ## 🔜 Idées futures
 - [ ] Application mobile (React Native / Flutter)
-- [ ] Ajouter des crédits Anthropic pour activer le chatbot IA
+- [ ] Obtenir une clé API Google Gemini (gratuite) sur https://aistudio.google.com/apikey pour activer le chatbot IA complet
 - [ ] Configurer cron-job.org pour éviter le cold start Render (ping /health toutes les 14min)
 - [ ] Clés API réelles Orange Money / Wave pour paiements en production
 - [ ] SMTP réel (SendGrid / Mailgun / Resend) pour les emails transactionnels
-- [ ] Tests Playwright E2E contre la production
+- [x] Tests Playwright E2E contre la production — landing, login, API health
 
 ---
 

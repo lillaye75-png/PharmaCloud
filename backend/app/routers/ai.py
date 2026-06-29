@@ -4,7 +4,7 @@ from typing import Optional
 
 from app.dependencies import get_current_user, require_role
 from app.models.user import User
-from app.services.ai_service import chat_with_claude, analyze_prescription_ocr
+from app.services.ai_service import chat_with_assistant, analyze_prescription_ocr
 
 router = APIRouter()
 
@@ -22,7 +22,7 @@ async def ai_chat(
     data: ChatRequest,
     user: User = Depends(get_current_user),
 ):
-    response = await chat_with_claude(
+    response = await chat_with_assistant(
         message=data.message,
         pharmacy_name=user.tenant.name if hasattr(user, "tenant") and user.tenant else "PharmaCloud",
     )
