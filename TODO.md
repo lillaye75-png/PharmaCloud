@@ -116,7 +116,7 @@
 - [x] Clé API Google Gemini obtenue et configurée dans Render — chatbot IA actif avec Gemini 1.5 Flash (gratuit)
 - [ ] Configurer cron-job.org pour éviter le cold start Render (ping /health toutes les 14min)
 - [ ] Clés API réelles Orange Money / Wave pour paiements en production
-- [ ] SMTP réel (SendGrid / Mailgun / Resend) pour les emails transactionnels
+- [x] SMTP réel — Resend intégré et clé API configurée dans Render
 - [x] Tests Playwright E2E contre la production — landing, login, API health
 
 ---

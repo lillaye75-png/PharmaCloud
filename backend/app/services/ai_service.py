@@ -58,7 +58,11 @@ def _build_system_prompt(pharmacy_name: str) -> str:
 async def _call_gemini_via_rest(message: str, system_prompt: str) -> str:
     import httpx
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.GEMINI_MODEL}:generateContent?key={settings.GOOGLE_API_KEY}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.GEMINI_MODEL}:generateContent"
+    headers = {
+        "Content-Type": "application/json",
+        "X-goog-api-key": settings.GOOGLE_API_KEY,
+    }
     payload = {
         "systemInstruction": {
             "parts": [{"text": system_prompt}]
@@ -74,7 +78,7 @@ async def _call_gemini_via_rest(message: str, system_prompt: str) -> str:
         },
     }
     async with httpx.AsyncClient(timeout=30) as client:
-        resp = await client.post(url, json=payload)
+        resp = await client.post(url, json=payload, headers=headers)
         data = resp.json()
         if resp.status_code != 200:
             err_msg = data.get("error", {}).get("message", str(data))
@@ -155,7 +159,7 @@ async def analyze_prescription_ocr(
             img_resp.raise_for_status()
             img_b64 = base64.b64encode(img_resp.content).decode("utf-8")
 
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.GEMINI_MODEL}:generateContent?key={settings.GOOGLE_API_KEY}"
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.GEMINI_MODEL}:generateContent"
         payload = {
             "systemInstruction": {"parts": [{"text": system}]},
             "contents": [
@@ -173,7 +177,7 @@ async def analyze_prescription_ocr(
             ],
         }
         async with httpx.AsyncClient(timeout=60) as client:
-            resp = await client.post(url, json=payload)
+            resp = await client.post(url, json=payload, headers={"X-goog-api-key": settings.GOOGLE_API_KEY})
             data = resp.json()
             if resp.status_code != 200:
                 return f"Erreur API: {data.get('error', {}).get('message', str(data))}"
