@@ -1,14 +1,14 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Pill, ShoppingCart, Package, Store, Network, Brain, BarChart3, Menu, X, ChevronRight, Star, ArrowUpRight, CheckCircle, TrendingUp, Users, ClipboardList } from "lucide-react";
+import { Pill, ShoppingCart, Package, Store, Network, Brain, BarChart3, Menu, X, ChevronRight, Star, ArrowUpRight, CheckCircle, TrendingUp, Users, ClipboardList, Shield, Smartphone } from "lucide-react";
 
 const features = [
   { icon: ShoppingCart, title: "Caisse intelligente", desc: "Point de vente rapide avec scan code-barres et gestion des remises" },
   { icon: Package, title: "Gestion des stocks", desc: "Inventaire, alertes rupture, mouvements et réapprovisionnement" },
   { icon: Store, title: "Boutique en ligne", desc: "Vendez en ligne avec votre propre URL et gérez les commandes" },
   { icon: Network, title: "Réseau inter-pharmacies", desc: "Trouvez des médicaments chez vos confrères en temps réel" },
-  { icon: Brain, title: "Assistant IA", desc: "PharmIA, votre assistant pharmacie intelligent powered by Claude" },
+  { icon: Brain, title: "Assistant IA", desc: "PharmIA, votre assistant pharmacie intelligent" },
   { icon: BarChart3, title: "Rapports & Analyses", desc: "Tableaux de bord, export PDF/CSV et analytics avancés" },
 ];
 
@@ -57,7 +57,7 @@ function AnimatedCounter({ end, suffix = "" }: { end: number; suffix?: string })
     }, { threshold: 0.5 });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [end]);
+  }, [end, suffix]);
   return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
 }
 
@@ -83,7 +83,7 @@ export default function LandingPage() {
             <Link href="/login" className="text-sm font-medium text-gray-600 transition hover:text-pharma-600">Connexion</Link>
             <Link href="/register" className="rounded-xl bg-pharma-600 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-pharma-700 hover:shadow-lg hover:shadow-pharma-600/25">Commencer</Link>
           </nav>
-          <button onClick={() => setMobileMenu(!mobileMenu)} className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 md:hidden" aria-label="Menu">
+          <button onClick={() => setMobileMenu(!mobileMenu)} className="flex h-10 w-10 items-center justify-center rounded-lg border border-gray-200 md:hidden">
             {mobileMenu ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
@@ -103,15 +103,16 @@ export default function LandingPage() {
       {/* Hero */}
       <section className="relative overflow-hidden pt-24 pb-0 sm:pt-32">
         <div className="absolute inset-0 bg-gradient-to-br from-pharma-600 via-pharma-500 to-cyan-500 opacity-5" />
-        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-pharma-400/10 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl" />
+        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-pharma-400/10 blur-3xl animate-pulse" />
+        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-cyan-400/10 blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+        <div className="absolute top-1/3 left-1/4 h-40 w-40 rounded-full bg-pharma-300/5 blur-2xl" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-pharma-50 px-4 py-1.5 text-sm font-medium text-pharma-700">
               <Star size={14} className="fill-pharma-500 text-pharma-500" />
               +100 pharmacies nous font confiance
             </div>
-            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-pharma-600 to-pharma-400 text-white shadow-2xl shadow-pharma-600/30 animate-pulse">
+            <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-pharma-600 to-pharma-400 text-white shadow-2xl shadow-pharma-600/30">
               <Pill size={28} />
             </div>
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
@@ -178,10 +179,11 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
-            <div className="mt-4 flex items-center justify-center gap-8 text-sm text-gray-400">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-8 text-sm text-gray-400">
               <span className="flex items-center gap-1"><CheckCircle size={14} className="text-green-500" /> Interface intuitive</span>
               <span className="flex items-center gap-1"><CheckCircle size={14} className="text-green-500" /> Temps réel</span>
               <span className="flex items-center gap-1"><CheckCircle size={14} className="text-green-500" /> Multi-appareils</span>
+              <span className="flex items-center gap-1"><Shield size={14} className="text-green-500" /> Sécurisé</span>
             </div>
           </div>
         </div>
@@ -209,12 +211,14 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* App Preview Section */}
-      <section className="bg-gray-50 py-20">
+      {/* Mobile App Section */}
+      <section className="bg-gradient-to-b from-gray-50 to-white py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-12 lg:grid-cols-2">
             <div>
-              <span className="rounded-full bg-pharma-50 px-4 py-1.5 text-sm font-medium text-pharma-700">Application mobile</span>
+              <span className="rounded-full bg-pharma-50 px-4 py-1.5 text-sm font-medium text-pharma-700">
+                <Smartphone size={14} className="inline mr-1" /> Application mobile
+              </span>
               <h2 className="mt-4 text-3xl font-bold text-gray-900 sm:text-4xl">Gérez votre pharmacie <br/>où que vous soyez</h2>
               <p className="mt-4 text-lg text-gray-600">Accédez à toutes les fonctionnalités depuis votre smartphone ou tablette. Suivez vos ventes, stocks et commandes en temps réel.</p>
               <div className="mt-8 grid grid-cols-2 gap-4">
@@ -224,7 +228,7 @@ export default function LandingPage() {
                   { icon: Users, label: "Gestion équipe", color: "text-blue-600 bg-blue-100" },
                   { icon: ClipboardList, label: "Rapports", color: "text-violet-600 bg-violet-100" },
                 ].map((s) => (
-                  <div key={s.label} className="flex items-center gap-3 rounded-xl bg-white p-4 shadow-sm border border-gray-100">
+                  <div key={s.label} className="flex items-center gap-3 rounded-xl bg-white p-4 shadow-sm border border-gray-100 transition-all hover:shadow-md">
                     <div className={`${s.color} rounded-lg p-2`}><s.icon size={18} /></div>
                     <span className="text-sm font-medium text-gray-900">{s.label}</span>
                   </div>
@@ -232,7 +236,7 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="relative mx-auto w-72">
-              <div className="rounded-[2rem] border-4 border-gray-800 bg-white p-3 shadow-2xl">
+              <div className="rounded-[2rem] border-4 border-gray-800 bg-white p-3 shadow-2xl transition-all hover:shadow-3xl">
                 <div className="rounded-2xl bg-gradient-to-br from-pharma-50 to-pharma-100 p-4">
                   <div className="flex items-center justify-between mb-4">
                     <div className="h-5 w-5 rounded-full bg-pharma-500" />
@@ -242,9 +246,9 @@ export default function LandingPage() {
                   <div className="mb-3 rounded-xl bg-white p-3 shadow-sm">
                     <div className="text-xs text-gray-400">Ventes du jour</div>
                     <div className="text-xl font-bold text-gray-900">245 500 FCFA</div>
-                    <div className="mt-1 flex gap-1">
+                    <div className="mt-2 flex items-end gap-1.5" style={{ height: 40 }}>
                       {[30, 55, 40, 70, 45, 60].map((h, i) => (
-                        <div key={i} className="h-8 flex-1 rounded-sm bg-gradient-to-t from-pharma-500 to-pharma-300" style={{ height: `${h}%`, marginTop: `${100 - h}%` }} />
+                        <div key={i} className="flex-1 rounded-sm bg-gradient-to-t from-pharma-500 to-pharma-300 transition-all hover:opacity-80" style={{ height: `${h}%` }} />
                       ))}
                     </div>
                   </div>
@@ -268,8 +272,12 @@ export default function LandingPage() {
       </section>
 
       {/* Stats */}
-      <section id="stats" className="bg-gradient-to-br from-pharma-600 via-pharma-500 to-cyan-600 py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section id="stats" className="relative bg-gradient-to-br from-pharma-600 via-pharma-500 to-cyan-600 py-20 overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-10 left-10 h-64 w-64 rounded-full bg-white blur-3xl" />
+          <div className="absolute bottom-10 right-10 h-48 w-48 rounded-full bg-cyan-300 blur-3xl" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             {[
               { value: 100, suffix: "+", label: "Pharmacies", sub: "et en pleine croissance" },
@@ -293,12 +301,13 @@ export default function LandingPage() {
       <section className="py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-2xl text-center">
-            <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">Ce que disent les pharmaciens</h2>
+            <span className="rounded-full bg-pharma-50 px-4 py-1.5 text-sm font-medium text-pharma-700">Témoignages</span>
+            <h2 className="mt-4 text-3xl font-bold text-gray-900 sm:text-4xl">Ce que disent les pharmaciens</h2>
             <p className="mt-4 text-lg text-gray-600">Ils utilisent PharmaCloud au quotidien</p>
           </div>
           <div className="mt-16 grid gap-6 sm:grid-cols-3">
             {testimonials.map((t) => (
-              <div key={t.name} className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+              <div key={t.name} className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-pharma-500 to-pharma-600 text-sm font-bold text-white">{t.initial}</div>
                   <div>
@@ -367,8 +376,8 @@ export default function LandingPage() {
             <h2 className="relative text-3xl font-bold text-white sm:text-4xl">Prêt à digitaliser votre pharmacie ?</h2>
             <p className="relative mx-auto mt-4 max-w-xl text-lg text-pharma-100">Rejoignez +100 pharmaciens qui utilisent déjà PharmaCloud au quotidien</p>
             <div className="relative mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link href="/register" className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-base font-semibold text-pharma-700 transition-all hover:bg-pharma-50 hover:shadow-xl">
-                Commencer gratuitement <ChevronRight size={18} />
+              <Link href="/register" className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-3.5 text-base font-semibold text-pharma-700 transition-all hover:bg-pharma-50 hover:shadow-xl">
+                Commencer gratuitement <ChevronRight size={18} className="transition-transform group-hover:translate-x-1" />
               </Link>
               <Link href="mailto:layedevops@gmail.com" className="inline-flex items-center gap-2 rounded-xl border-2 border-white/30 px-8 py-3.5 text-base font-semibold text-white transition-all hover:border-white/50 hover:bg-white/10">
                 Nous contacter
@@ -378,7 +387,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Developer Footer */}
+      {/* Footer */}
       <footer className="border-t border-gray-100 bg-gray-50 py-12">
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <div className="mx-auto mb-6 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-pharma-600 to-pharma-400 text-white shadow-lg">
@@ -386,9 +395,8 @@ export default function LandingPage() {
           </div>
           <h3 className="text-lg font-semibold text-gray-900">Développé par Abdoulaye Sow</h3>
           <div className="mt-4 flex flex-col items-center gap-2 text-sm text-gray-600">
-            <div className="flex items-center gap-2"><span>📞 +221 77 662 14 10 / +221 70 837 21 27</span></div>
+            <div className="flex items-center gap-2"><span>+221 77 662 14 10 / +221 70 837 21 27</span></div>
             <div className="flex items-center gap-2">
-              <span>📧</span>
               <a href="mailto:layedevops@gmail.com" className="text-pharma-600 hover:underline">layedevops@gmail.com</a>
             </div>
           </div>
@@ -398,7 +406,7 @@ export default function LandingPage() {
             <Link href="/register" className="hover:text-pharma-600">Inscription</Link>
           </div>
           <div className="mt-6 border-t border-gray-200 pt-6 text-xs text-gray-400">
-            © 2026 PharmaCloud. Tous droits réservés.
+            &copy; 2026 PharmaCloud. Tous droits réservés.
           </div>
         </div>
       </footer>

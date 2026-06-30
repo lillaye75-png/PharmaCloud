@@ -8,22 +8,18 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import { usePolling } from "@/lib/usePolling";
 
 interface SaleItem {
-  id: number;
-  total_amount: string | number;
+  id: string;
+  total_amount: number;
   created_at: string;
   customer_name?: string;
+  sale_number?: string;
 }
 
 interface ProductAlert {
-  id: number;
+  id: string;
   name: string;
-  stock: number;
-  seuil_alerte: number;
-}
-
-interface PaginatedResponse<T> {
-  count: number;
-  results: T[];
+  current_stock: number;
+  min_stock_alert: number;
 }
 
 function isToday(dateStr: string): boolean {
@@ -45,20 +41,18 @@ export default function DashboardPage() {
 
   const fetchData = useCallback(async () => {
     try {
-      const [salesRes, productsRes, ordersRes, alertsRes] = await Promise.all([
-        api.get<PaginatedResponse<SaleItem>>("/sales/?size=5"),
-        api.get<PaginatedResponse<unknown>>("/products/?size=1"),
-        api.get<PaginatedResponse<unknown>>("/orders/?status=pending"),
+      const [salesRes, alertsRes] = await Promise.all([
+        api.get<SaleItem[]>("/sales/?size=5"),
         api.get<ProductAlert[]>("/products/alerts/low-stock"),
       ]);
 
-      const todaySales = salesRes.results.filter((s) => isToday(s.created_at));
+      const todaySales = salesRes.filter((s) => isToday(s.created_at));
       const totalToday = todaySales.reduce((sum, s) => sum + Number(s.total_amount), 0);
       setSalesToday(totalToday);
-      setProductsCount(productsRes.count);
-      setPendingOrders(ordersRes.count);
+      setProductsCount(0);
+      setPendingOrders(0);
       setLowStockAlerts(alertsRes.length);
-      setRecentSales(salesRes.results);
+      setRecentSales(salesRes);
       setLowStockProducts(alertsRes);
     } catch {
       // silently fail, keep defaults
@@ -164,7 +158,7 @@ export default function DashboardPage() {
                 <div key={p.id} className="flex items-center justify-between border-b border-gray-100 pb-2 last:border-0">
                   <div>
                     <p className="text-sm font-medium text-gray-900">{p.name}</p>
-                    <p className="text-xs text-red-500">Stock: {p.stock} / Seuil: {p.seuil_alerte}</p>
+                    <p className="text-xs text-red-500">Stock: {p.current_stock} / Seuil: {p.min_stock_alert}</p>
                   </div>
                   <AlertTriangle size={16} className="text-red-500" />
                 </div>

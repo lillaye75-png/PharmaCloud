@@ -44,6 +44,13 @@ interface TenantInfo {
   email?: string;
 }
 
+interface CurrentUser {
+  id: string;
+  email: string;
+  first_name?: string;
+  last_name?: string;
+}
+
 export default function CaissePage() {
   const router = useRouter();
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -58,10 +65,12 @@ export default function CaissePage() {
   const [customer, setCustomer] = useState({ name: "", phone: "", email: "" });
   const [showCustomer, setShowCustomer] = useState(false);
   const [tenant, setTenant] = useState<TenantInfo | null>(null);
+  const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     api.get<TenantInfo>("/tenant/me").then(setTenant).catch(() => {});
+    api.get<CurrentUser>("/auth/me").then(setCurrentUser).catch(() => {});
   }, []);
 
   const subtotal = cart.reduce((s, i) => s + i.unit_price * i.quantity, 0);
@@ -171,6 +180,10 @@ export default function CaissePage() {
               <div className="flex justify-between">
                 <span className="text-gray-500">Date</span>
                 <span className="text-gray-900">{new Date(lastSale.created_at).toLocaleDateString("fr-FR")}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Vendeur</span>
+                <span className="text-gray-900">{currentUser ? `${currentUser.first_name || ''} ${currentUser.last_name || ''}`.trim() || currentUser.email : "—"}</span>
               </div>
               {lastSale.customer_name && (
                 <>

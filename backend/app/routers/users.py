@@ -6,7 +6,9 @@ from pydantic import BaseModel, ConfigDict
 
 from app.database import get_db
 from app.models.user import User
+from app.models.tenant import Tenant
 from app.dependencies import get_current_user, require_role, pwd_context
+from app.services.notification_service import send_email
 
 router = APIRouter()
 
@@ -60,7 +62,7 @@ def list_users(
 
 
 @router.post("/invite", response_model=UserResponse, status_code=201)
-def invite_user(
+async def invite_user(
     data: UserCreate,
     user: User = Depends(require_role("owner")),
     db: Session = Depends(get_db),
@@ -69,6 +71,7 @@ def invite_user(
     if existing:
         raise HTTPException(status_code=400, detail="Email déjà utilisé")
 
+    tenant = db.query(Tenant).filter(Tenant.id == user.tenant_id).first()
     new_user = User(
         tenant_id=user.tenant_id,
         email=data.email,
@@ -81,6 +84,30 @@ def invite_user(
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    login_url = f"https://pharma-cloud.vercel.app/login"
+    email_body = f"""
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #4f46e5, #06b6d4); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+            <h1 style="color: white; margin: 0;">PharmaCloud</h1>
+            <p style="color: rgba(255,255,255,0.9); margin-top: 5px;">ERP Pharmacie</p>
+        </div>
+        <div style="padding: 30px; border: 1px solid #e5e7eb; border-top: 0; border-radius: 0 0 12px 12px;">
+            <h2 style="margin-top: 0;">Invitation à rejoindre {tenant.name if tenant else 'la pharmacie'}</h2>
+            <p>Bonjour {data.first_name or ''},</p>
+            <p>Vous avez été invité à rejoindre PharmaCloud. Voici vos identifiants :</p>
+            <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <p><strong>Email :</strong> {data.email}</p>
+                <p><strong>Mot de passe :</strong> {data.password}</p>
+            </div>
+            <p>Connectez-vous ici :</p>
+            <a href="{login_url}" style="display: inline-block; background: #4f46e5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">Se connecter</a>
+            <p style="margin-top: 20px; color: #6b7280; font-size: 12px;">PharmaCloud - L'ERP intelligent pour les pharmacies africaines</p>
+        </div>
+    </div>
+    """
+    await send_email(data.email, f"Invitation à rejoindre PharmaCloud - {tenant.name if tenant else 'Pharmacie'}", email_body)
+
     return UserResponse(
         id=str(new_user.id),
         email=new_user.email,

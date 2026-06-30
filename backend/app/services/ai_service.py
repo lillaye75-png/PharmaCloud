@@ -55,38 +55,49 @@ def _build_system_prompt(pharmacy_name: str) -> str:
     )
 
 
+GEMINI_MODELS_TO_TRY = [
+    "gemini-2.0-flash",
+    "gemini-1.5-flash",
+    "gemini-1.5-pro",
+    "gemini-pro",
+]
+
+
 async def _call_gemini_via_rest(message: str, system_prompt: str) -> str:
     import httpx
 
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{settings.GEMINI_MODEL}:generateContent"
-    headers = {
-        "Content-Type": "application/json",
-        "X-goog-api-key": settings.GOOGLE_API_KEY,
-    }
-    payload = {
-        "systemInstruction": {
-            "parts": [{"text": system_prompt}]
-        },
-        "contents": [
-            {
-                "parts": [{"text": message}]
-            }
-        ],
-        "generationConfig": {
-            "maxOutputTokens": 1024,
-            "temperature": 0.7,
-        },
-    }
-    async with httpx.AsyncClient(timeout=30) as client:
-        resp = await client.post(url, json=payload, headers=headers)
-        data = resp.json()
-        if resp.status_code != 200:
-            err_msg = data.get("error", {}).get("message", str(data))
-            raise RuntimeError(err_msg)
-        candidates = data.get("candidates", [])
-        if not candidates:
-            raise RuntimeError("Aucune réponse générée")
-        return candidates[0]["content"]["parts"][0]["text"]
+    last_error = None
+    models_to_try = [settings.GEMINI_MODEL] + [m for m in GEMINI_MODELS_TO_TRY if m != settings.GEMINI_MODEL]
+
+    for model in models_to_try:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+        headers = {
+            "Content-Type": "application/json",
+            "X-goog-api-key": settings.GOOGLE_API_KEY,
+        }
+        payload = {
+            "systemInstruction": {
+                "parts": [{"text": system_prompt}]
+            },
+            "contents": [
+                {
+                    "parts": [{"text": message}]
+                }
+            ],
+            "generationConfig": {
+                "maxOutputTokens": 1024,
+                "temperature": 0.7,
+            },
+        }
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post(url, json=payload, headers=headers)
+            data = resp.json()
+            if resp.status_code == 200:
+                candidates = data.get("candidates", [])
+                if candidates:
+                    return candidates[0]["content"]["parts"][0]["text"]
+            last_error = data.get("error", {}).get("message", str(data))
+    raise RuntimeError(last_error or "Aucun modèle disponible")
 
 
 async def chat_with_assistant(
@@ -113,9 +124,10 @@ async def chat_with_assistant(
             err = str(e)
             if "API_KEY" in err.upper() or "not found" in err.lower() or "invalid" in err.lower() or "permission" in err.lower() or "403" in err or "400" in err:
                 return (
-                    f"❌ Clé API Google Gemini invalide ({err[:100]}).\n\n"
+                    f"❌ Clé API Google Gemini invalide ou modèle non disponible.\n\n"
                     "Obtenez une nouvelle clé gratuite sur https://aistudio.google.com/apikey\n"
-                    "Puis mettez-la dans Render Dashboard → Environment → GOOGLE_API_KEY"
+                    "Puis mettez-la dans Render Dashboard → Environment → GOOGLE_API_KEY\n\n"
+                    "Ou configurez-la dans votre fichier .env : GOOGLE_API_KEY=votre_clé_ici"
                 )
 
     keyword_fallback = _keyword_response(message)

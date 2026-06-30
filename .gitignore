@@ -45,8 +45,10 @@ backend/uploads/*
 .pytest_cache/
 .coverage
 htmlcov/
+test-results/
 
 .vercel
 
 scripts/
+next-env.d.ts
 

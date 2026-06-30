@@ -64,10 +64,8 @@ def create_slip(
         tenant_id=user.tenant_id,
         slip_number=f"BL-{datetime.now(timezone.utc).strftime('%Y%m%d%H%M%S')}",
         supplier_name=data.supplier_name,
-        status="received",
+        status="pending",
         total_amount=total,
-        received_by=user.id,
-        received_at=datetime.now(timezone.utc),
         notes=data.notes,
     )
     db.add(slip)
@@ -81,24 +79,12 @@ def create_slip(
         if not product:
             raise HTTPException(status_code=404, detail=f"Produit {item.product_id} introuvable")
 
-        product.current_stock += item.quantity_received
-        product.purchase_price = item.unit_cost
-
         db.add(DeliverySlipItem(
             slip_id=slip.id,
             product_id=product.id,
             quantity_ordered=item.quantity_ordered,
-            quantity_received=item.quantity_received,
+            quantity_received=item.quantity_received or 0,
             unit_cost=item.unit_cost,
-        ))
-        db.add(StockMovement(
-            tenant_id=user.tenant_id,
-            product_id=product.id,
-            movement_type="in",
-            quantity=item.quantity_received,
-            reason="delivery_slip",
-            unit_cost=item.unit_cost,
-            performed_by=user.id,
         ))
 
     db.commit()

@@ -3,8 +3,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { api } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
-import { Package, Search, Clock, CheckCircle, XCircle } from "lucide-react";
+import { Package, Clock, CheckCircle, XCircle, Printer, Trash2 } from "lucide-react";
 import { usePolling } from "@/lib/usePolling";
+import ConfirmDialog from "@/components/ui/ConfirmDialog";
 
 interface Order {
   id: string;
@@ -29,6 +30,7 @@ const statusConfig: Record<string, { label: string; color: string; icon: any }> 
 export default function CommandesPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [filter, setFilter] = useState("");
+  const [confirm, setConfirm] = useState<{ id: string; status: string } | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -46,10 +48,63 @@ export default function CommandesPage() {
   const updateStatus = async (id: string, status: string) => {
     try {
       await api.put(`/orders/${id}/status?status=${status}`);
+      setConfirm(null);
       load();
     } catch (err: unknown) {
       alert(err instanceof Error ? err.message : "Erreur");
     }
+  };
+
+  const deleteOrder = async (id: string) => {
+    try {
+      await api.delete(`/orders/${id}`);
+      load();
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Erreur");
+    }
+  };
+
+  const printOrder = (o: Order) => {
+    const win = window.open("", "_blank");
+    if (!win) return;
+    const sc = statusConfig[o.status] || { label: o.status };
+    win.document.write(`
+      <html><head><title>Bon de livraison - ${o.order_number}</title>
+      <style>
+        body { font-family: Arial, sans-serif; padding: 40px; max-width: 600px; margin: 0 auto; }
+        h1 { color: #4f46e5; font-size: 18px; margin-bottom: 5px; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #4f46e5; padding-bottom: 20px; }
+        .header h2 { margin: 0; font-size: 14px; color: #666; }
+        .info { margin-bottom: 20px; }
+        .info p { margin: 3px 0; font-size: 13px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; font-size: 13px; }
+        th { background: #f3f4f6; }
+        .total { text-align: right; font-weight: bold; margin-top: 15px; font-size: 16px; }
+        .footer { text-align: center; margin-top: 40px; font-size: 11px; color: #999; border-top: 1px solid #ddd; padding-top: 15px; }
+        @media print { body { padding: 20px; } }
+      </style></head><body>
+        <div class="header">
+          <h1>PharmaCloud</h1>
+          <h2>Bon de livraison</h2>
+        </div>
+        <div class="info">
+          <p><strong>N° commande :</strong> ${o.order_number || o.id.slice(0, 8)}</p>
+          <p><strong>Date :</strong> ${formatDate(o.created_at)}</p>
+          <p><strong>Statut :</strong> ${sc.label}</p>
+          <p><strong>Type :</strong> ${o.delivery_type === "delivery" ? "Livraison" : "Retrait"}</p>
+          <p><strong>Paiement :</strong> ${o.payment_status === "paid" ? "Payé" : "Non payé"}</p>
+        </div>
+        <table>
+          <tr><th>Description</th><th>Qté</th><th>Prix</th></tr>
+          <tr><td>Commande ${o.order_number || o.id.slice(0, 8)}</td><td>1</td><td>${formatCurrency(o.total)}</td></tr>
+        </table>
+        <div class="total">Total : ${formatCurrency(o.total)}</div>
+        <div class="footer">Généré par PharmaCloud - l'ERP intelligent pour les pharmacies africaines</div>
+        <script>window.print();</script>
+      </body></html>
+    `);
+    win.document.close();
   };
 
   return (
@@ -109,36 +164,50 @@ export default function CommandesPage() {
                       </td>
                       <td className="px-4 py-3 text-gray-600">{o.delivery_type === "delivery" ? "Livraison" : "Retrait"}</td>
                       <td className="px-4 py-3 text-right font-medium">{formatCurrency(o.total)}</td>
-                      <td className="px-4 py-3 text-right">
-                        {o.status === "pending" && (
-                          <select
-                            onChange={(e) => updateStatus(o.id, e.target.value)}
-                            className="rounded border border-gray-300 px-2 py-1 text-xs"
-                            defaultValue=""
-                          >
-                            <option value="" disabled>Changer statut</option>
-                            <option value="confirmed">Confirmer</option>
-                            <option value="cancelled">Annuler</option>
-                          </select>
-                        )}
-                        {o.status === "confirmed" && (
-                          <button onClick={() => updateStatus(o.id, "preparing")}
-                            className="rounded bg-pharma-600 px-3 py-1 text-xs text-white hover:bg-pharma-700">
-                            En préparation
+                      <td className="px-4 py-3">
+                        <div className="flex items-center justify-end gap-2">
+                          <button onClick={() => printOrder(o)}
+                            className="rounded p-1.5 text-gray-400 hover:bg-gray-100 hover:text-pharma-600"
+                            title="Imprimer bon de livraison">
+                            <Printer size={15} />
                           </button>
-                        )}
-                        {o.status === "preparing" && (
-                          <button onClick={() => updateStatus(o.id, "ready")}
-                            className="rounded bg-green-600 px-3 py-1 text-xs text-white hover:bg-green-700">
-                            Prête
-                          </button>
-                        )}
-                        {o.status === "ready" && (
-                          <button onClick={() => updateStatus(o.id, "delivered")}
-                            className="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700">
-                            Livrer
-                          </button>
-                        )}
+                          {(o.status === "pending" || o.status === "confirmed") && (
+                            <button onClick={() => setConfirm({ id: o.id, status: "cancelled" })}
+                              className="rounded p-1.5 text-gray-400 hover:bg-red-50 hover:text-red-600"
+                              title="Supprimer">
+                              <Trash2 size={15} />
+                            </button>
+                          )}
+                          {o.status === "pending" && (
+                            <select
+                              onChange={(e) => setConfirm({ id: o.id, status: e.target.value })}
+                              className="rounded border border-gray-300 px-2 py-1 text-xs"
+                              defaultValue=""
+                            >
+                              <option value="" disabled>Statut</option>
+                              <option value="confirmed">Confirmer</option>
+                              <option value="cancelled">Annuler</option>
+                            </select>
+                          )}
+                          {o.status === "confirmed" && (
+                            <button onClick={() => updateStatus(o.id, "preparing")}
+                              className="rounded bg-pharma-600 px-3 py-1 text-xs text-white hover:bg-pharma-700">
+                              Préparer
+                            </button>
+                          )}
+                          {o.status === "preparing" && (
+                            <button onClick={() => updateStatus(o.id, "ready")}
+                              className="rounded bg-green-600 px-3 py-1 text-xs text-white hover:bg-green-700">
+                              Prête
+                            </button>
+                          )}
+                          {o.status === "ready" && (
+                            <button onClick={() => setConfirm({ id: o.id, status: "delivered" })}
+                              className="rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700">
+                              Livrer
+                            </button>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -148,6 +217,18 @@ export default function CommandesPage() {
           </div>
         )}
       </div>
+
+      {confirm && (
+        <ConfirmDialog
+          open={true}
+          title={confirm.status === "delivered" ? "Confirmer la livraison" : confirm.status === "cancelled" ? "Annuler la commande" : "Changer le statut"}
+          message={confirm.status === "delivered" ? "Le stock sera déduit et les frais de livraison seront comptabilisés." : confirm.status === "cancelled" ? "Cette action est irréversible." : "Confirmez-vous ce changement ?"}
+          confirmLabel={confirm.status === "delivered" ? "Livrer" : confirm.status === "cancelled" ? "Annuler" : "Confirmer"}
+          variant={confirm.status === "cancelled" ? "danger" : "info"}
+          onConfirm={() => updateStatus(confirm.id, confirm.status)}
+          onCancel={() => setConfirm(null)}
+        />
+      )}
     </div>
   );
 }

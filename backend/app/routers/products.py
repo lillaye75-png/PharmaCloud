@@ -12,6 +12,9 @@ from app.database import get_db
 from app.models.product import Product
 from app.models.user import User
 from app.models.stock import StockMovement
+from app.models.sale import SaleItem
+from app.models.delivery import DeliverySlipItem
+from app.models.order import OrderItem
 from app.dependencies import get_current_user, require_role
 from app.schemas.product import ProductCreate, ProductUpdate, ProductResponse
 
@@ -216,6 +219,20 @@ def delete_product(
     )
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
+    from app.models.sale import SaleItem
+    db.query(StockMovement).filter(
+        StockMovement.product_id == product_id,
+        StockMovement.tenant_id == user.tenant_id,
+    ).delete()
+    db.query(SaleItem).filter(
+        SaleItem.product_id == product_id,
+    ).delete(synchronize_session=False)
+    db.query(DeliverySlipItem).filter(
+        DeliverySlipItem.product_id == product_id,
+    ).delete(synchronize_session=False)
+    db.query(OrderItem).filter(
+        OrderItem.product_id == product_id,
+    ).delete(synchronize_session=False)
     db.delete(product)
     db.commit()
 

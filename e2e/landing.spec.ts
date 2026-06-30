@@ -9,7 +9,7 @@ test.describe("Landing Page (Production)", () => {
 
   test("should have working navigation links", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("text=PharmaCloud")).toBeVisible();
+    await expect(page.getByRole("banner").getByText("PharmaCloud")).toBeVisible();
     const links = page.locator("a");
     const count = await links.count();
     expect(count).toBeGreaterThan(0);

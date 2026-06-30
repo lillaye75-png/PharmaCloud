@@ -1,17 +1,24 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { api } from "@/lib/api";
 import { ArrowLeft, Save } from "lucide-react";
 
+interface Category { id: string; name: string; }
+interface Department { id: string; name: string; }
+
 export default function NouveauProduitPage() {
   const router = useRouter();
   const [saving, setSaving] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
   const [form, setForm] = useState({
     name: "",
     generic_name: "",
     barcode: "",
+    category_id: "",
+    department_id: "",
     description: "",
     dosage_form: "",
     dosage_strength: "",
@@ -25,11 +32,19 @@ export default function NouveauProduitPage() {
     is_visible_in_shop: true,
   });
 
+  useEffect(() => {
+    api.get<Category[]>("/categories/").then(setCategories).catch(() => {});
+    api.get<Department[]>("/categories/departments").then(setDepartments).catch(() => {});
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     try {
-      await api.post("/products/", form);
+      const payload: Record<string, unknown> = { ...form };
+      if (!payload.category_id) delete payload.category_id;
+      if (!payload.department_id) delete payload.department_id;
+      await api.post("/products/", payload);
       router.push("/produits");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Erreur";
@@ -61,6 +76,22 @@ export default function NouveauProduitPage() {
               <label className="block text-sm font-medium text-gray-700">Nom du produit *</label>
               <input required value={form.name} onChange={(e) => set("name", e.target.value)}
                 className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-pharma-500 focus:outline-none" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Catégorie</label>
+              <select value={form.category_id} onChange={(e) => set("category_id", e.target.value)}
+                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-pharma-500 focus:outline-none">
+                <option value="">Sélectionner une catégorie</option>
+                {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Département</label>
+              <select value={form.department_id} onChange={(e) => set("department_id", e.target.value)}
+                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-pharma-500 focus:outline-none">
+                <option value="">Sélectionner un département</option>
+                {departments.map((d) => <option key={d.id} value={d.id}>{d.name}</option>)}
+              </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700">Nom générique (DCI)</label>

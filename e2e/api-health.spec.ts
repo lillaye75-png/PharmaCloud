@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("Backend API (Production)", () => {
-  const API_URL = "https://pharmacloud-backend.onrender.com";
+test.describe("Backend API", () => {
+  const API_URL = "http://localhost:8001";
 
   test("health endpoint returns 200", async ({ request }) => {
     const resp = await request.get(`${API_URL}/health`);

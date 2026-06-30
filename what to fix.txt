@@ -1,8 +1,18 @@
 dashboard don't get update for any sales
 after made a sales while add customer information it will be not id the invoice plus seller information
 now want you to create a gui for JavaScript Confirm Dialog Box (specifically triggered via the window.confirm() method in web development).
-
-
+Bons de livraison after add it it will auto mark it as receved
+stock mouvement when odder a "Bons de livraison" when receive it it won't update entry mouvement stock
+in commande add users can print a "bon de livraison" even print it delete/modify it and also when and commande are marked delivred it will auto accounting it
+online store any configuration won't be saved after did any change then click the save button everything will desappear after page reload
+Réseau Inter-Pharmacies it must show pharmacie real location by enable location device to use the real location and after any request medicament add users can track it and able to delete it open it to track it
+rapport, dashboard can you add more feature on it and more information also enable users can set personnalized button as to filtred it like set a passed day's to know the repport of that day's etc
+also need explain for facturation, grosistes
+when adding new users it say email sended but the users will not receive any email for create account
+assistance : ❌ Clé API Google Gemini invalide (models/gemini-1.5-flash is not found for API version v1beta, or is not supported for generateContent). Obtenez une nouvelle clé gratuite sur https://aistudio.google.com/apikey Puis mettez-la dans Render Dashboard → Environment → GOOGLE_API_KEY
+Import / Export after Exporter les produits and add some on it after Importer des produits (CSV) it will not add it in product
+why while creating new product categorie, department will not show to pick it
+also for the landing page update with landing page sroolable with image match african pharmacie also with what the application does with modern icon use "activate full stack mode" to use all skills
 
 
 

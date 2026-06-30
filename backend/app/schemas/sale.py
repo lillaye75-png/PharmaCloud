@@ -35,6 +35,7 @@ class SaleResponse(BaseModel):
     customer_name: Optional[str] = None
     customer_phone: Optional[str] = None
     customer_email: Optional[str] = None
+    cashier_name: Optional[str] = None
     created_at: str
 
     model_config = ConfigDict(from_attributes=True)

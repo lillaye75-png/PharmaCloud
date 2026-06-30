@@ -48,6 +48,7 @@ def get_tenant(user: User = Depends(get_current_user), db: Session = Depends(get
         "latitude": tenant.latitude,
         "longitude": tenant.longitude,
         "description": tenant.description,
+        "settings": tenant.settings or "{}",
         "billing_plan": tenant.billing_plan,
         "is_active": tenant.is_active,
     }
@@ -85,6 +86,7 @@ def update_tenant(
         "latitude": tenant.latitude,
         "longitude": tenant.longitude,
         "description": tenant.description,
+        "settings": tenant.settings or "{}",
         "billing_plan": tenant.billing_plan,
         "is_active": tenant.is_active,
     }

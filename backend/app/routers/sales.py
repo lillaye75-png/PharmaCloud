@@ -15,7 +15,13 @@ from app.schemas.sale import SaleCreate, SaleResponse
 router = APIRouter()
 
 
-def sale_to_response(s: Sale) -> SaleResponse:
+def sale_to_response(s: Sale, db: Optional[Session] = None) -> SaleResponse:
+    cashier_name = None
+    if s.cashier_id and db:
+        cashier = db.query(User).filter(User.id == s.cashier_id).first()
+        if cashier:
+            cashier_name = f"{cashier.first_name or ''} {cashier.last_name or ''}".strip() or cashier.email
+
     return SaleResponse(
         id=str(s.id),
         sale_number=s.sale_number,
@@ -30,6 +36,7 @@ def sale_to_response(s: Sale) -> SaleResponse:
         customer_name=s.customer_name,
         customer_phone=s.customer_phone,
         customer_email=s.customer_email,
+        cashier_name=cashier_name,
         created_at=s.created_at.isoformat() if s.created_at else "",
     )
 
@@ -45,8 +52,9 @@ def list_sales(
     q = db.query(Sale).filter(Sale.tenant_id == user.tenant_id)
     if status:
         q = q.filter(Sale.status == status)
+    total = q.count()
     sales = q.order_by(Sale.created_at.desc()).offset((page - 1) * size).limit(size).all()
-    return [sale_to_response(s) for s in sales]
+    return [sale_to_response(s, db) for s in sales]
 
 
 @router.get("/pending", response_model=list[SaleResponse])
@@ -61,7 +69,7 @@ def pending_sales(
         .limit(20)
         .all()
     )
-    return [sale_to_response(s) for s in sales]
+    return [sale_to_response(s, db) for s in sales]
 
 
 @router.get("/report")
@@ -176,6 +184,9 @@ def create_sale(
         paid_amount=total,
         change_amount=0,
         notes=data.notes,
+        customer_name=data.customer_name,
+        customer_phone=data.customer_phone,
+        customer_email=data.customer_email,
     )
     db.add(sale)
     db.flush()
@@ -186,7 +197,7 @@ def create_sale(
 
     db.commit()
     db.refresh(sale)
-    return sale_to_response(sale)
+    return sale_to_response(sale, db)
 
 
 @router.get("/{sale_id}", response_model=SaleResponse)
@@ -202,7 +213,7 @@ def get_sale(
     )
     if not sale:
         raise HTTPException(status_code=404, detail="Sale not found")
-    return sale_to_response(sale)
+    return sale_to_response(sale, db)
 
 
 @router.post("/{sale_id}/refund", response_model=SaleResponse)
@@ -240,7 +251,7 @@ def refund_sale(
     sale.status = "refunded"
     db.commit()
     db.refresh(sale)
-    return sale_to_response(sale)
+    return sale_to_response(sale, db)
 
 
 @router.put("/{sale_id}/status", response_model=SaleResponse)
@@ -260,7 +271,7 @@ def update_sale_status(
     sale.status = status
     db.commit()
     db.refresh(sale)
-    return sale_to_response(sale)
+    return sale_to_response(sale, db)
 
 
 @router.delete("/{sale_id}", status_code=204)
@@ -290,7 +301,7 @@ def update_sale(
         setattr(sale, key, val)
     db.commit()
     db.refresh(sale)
-    return sale_to_response(sale)
+    return sale_to_response(sale, db)
 
 
 @router.get("/{sale_id}/items")

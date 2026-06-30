@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { api } from "@/lib/api";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { Truck, Plus } from "lucide-react";
+import { Truck, Plus, CheckCircle } from "lucide-react";
 
 interface Slip {
   id: string;
@@ -25,6 +25,15 @@ export default function BonsLivraisonPage() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  const markReceived = async (id: string) => {
+    try {
+      await api.put(`/delivery-slips/${id}/receive`, []);
+      load();
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "Erreur");
+    }
+  };
 
   return (
     <div>
@@ -53,6 +62,7 @@ export default function BonsLivraisonPage() {
                 <th className="px-4 py-3">Date</th>
                 <th className="px-4 py-3">Statut</th>
                 <th className="px-4 py-3 text-right">Total</th>
+                <th className="px-4 py-3 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
@@ -62,9 +72,21 @@ export default function BonsLivraisonPage() {
                   <td className="px-4 py-3 text-gray-600">{s.supplier_name}</td>
                   <td className="px-4 py-3 text-gray-600">{formatDate(s.created_at)}</td>
                   <td className="px-4 py-3">
-                    <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">{s.status}</span>
+                    {s.status === "pending" ? (
+                      <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700">En attente</span>
+                    ) : (
+                      <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">Reçu</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-right font-medium">{formatCurrency(s.total_amount)}</td>
+                  <td className="px-4 py-3 text-right">
+                    {s.status === "pending" && (
+                      <button onClick={() => markReceived(s.id)}
+                        className="flex items-center gap-1 rounded bg-green-600 px-3 py-1 text-xs text-white hover:bg-green-700 ml-auto">
+                        <CheckCircle size={12} /> Marquer reçu
+                      </button>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>

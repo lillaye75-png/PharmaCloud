@@ -9,6 +9,7 @@ from app.database import get_db
 from app.models.order import Order, OrderItem
 from app.models.product import Product
 from app.models.stock import StockMovement
+from app.models.expense import Expense
 from app.models.user import User
 from app.dependencies import get_current_user, require_role
 from app.schemas.order import OrderCreate, OrderResponse
@@ -79,6 +80,13 @@ def update_order_status(
                     movement_type="exit",
                     reason=f"Commande {order.order_number} livrée",
                 ))
+        db.add(Expense(
+            tenant_id=order.tenant_id,
+            category="frais_livraison",
+            amount=order.delivery_fee or 0,
+            description=f"Frais livraison commande {order.order_number}",
+            date=datetime.now().date(),
+        ))
     db.commit()
     return {"status": status}
 
@@ -124,3 +132,17 @@ async def upload_order_prescription(
     order.prescription_url = url
     db.commit()
     return {"url": url, "order_id": str(order_id)}
+
+
+@router.delete("/{order_id}", status_code=204)
+def delete_order(
+    order_id: uuid.UUID,
+    user: User = Depends(require_role("owner")),
+    db: Session = Depends(get_db),
+):
+    order = db.query(Order).filter(Order.id == order_id, Order.tenant_id == user.tenant_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    db.query(OrderItem).filter(OrderItem.order_id == order_id).delete()
+    db.delete(order)
+    db.commit()

@@ -9,13 +9,13 @@ test.describe("Authentication (Production)", () => {
 
   test("should reject invalid credentials", async ({ page }) => {
     await page.goto("/login");
-    const emailInput = page.locator('input[type="email"], input[name="email"], input[placeholder*="email" i]').first();
+    const emailInput = page.locator('input[type="email"]').first();
     const passwordInput = page.locator('input[type="password"]').first();
     const submitBtn = page.locator("button[type='submit']").first();
     await emailInput.fill("wrong@test.com");
     await passwordInput.fill("wrongpassword");
     await submitBtn.click();
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(3000);
     const currentUrl = page.url();
     expect(currentUrl).toContain("login");
   });
